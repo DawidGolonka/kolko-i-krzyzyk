@@ -1,14 +1,14 @@
 import sys
 
 import pygame
-import settings
+from classes import Settings
 import functions
 from pygame.sprite import Group
 
 def run_game():
     ''' Inicjalizacja gry i utworzenie ekranu '''
     pygame.init()
-    kk_settings = settings.Settings()
+    kk_settings = Settings()
     screen = pygame.display.set_mode((kk_settings.screen_width, kk_settings.screen_height))
     pygame.display.set_caption('Kołko i krzyżyk')
     rectangles = Group()

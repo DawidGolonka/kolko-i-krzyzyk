@@ -1,13 +1,8 @@
 import sys
 import pygame
-from rectangles import Rectangle
-from circle import Circle
-from cross import Cross
+from classes import Rectangle
+from classes import CircleCross
 
-line_beg_x = 0
-line_beg_y = 0
-line_end_x = 0
-line_end_y = 0
 
 def check_events(rectangles, screen, circles, kk_settings, crosses):
     ''' funckja sprawdzająca iterakcje użytkownika '''
@@ -18,6 +13,7 @@ def check_events(rectangles, screen, circles, kk_settings, crosses):
             mouse_x, mouse_y = pygame.mouse.get_pos()
             check_rectangle_clicked(mouse_x, mouse_y, rectangles, screen, circles, kk_settings, crosses)
 
+
 def update_screen(kk_settings, screen, rectangles, circles, crosses):
     ''' Odswiezanie ekranu  '''
     # odwiezenie ekranu po przejsciu kazdej iteracji
@@ -26,7 +22,7 @@ def update_screen(kk_settings, screen, rectangles, circles, crosses):
     rectangles.draw(screen)
     circles.draw(screen)
     crosses.draw(screen)
-    pygame.draw.line(screen, (10, 10, 11), (line_beg_x, line_beg_y), (line_end_x, line_end_y), 20)
+    pygame.draw.line(screen, (10, 10, 11), (kk_settings.line_beg_x, kk_settings.line_beg_y), (kk_settings.line_end_x, kk_settings.line_end_y), 20)
     #Wyswietlanie ostatniej wersji ekranu
     pygame.display.flip()
 
@@ -45,29 +41,27 @@ def create_rectangles(kk_settings, screen, rectangles):
 
 def create_circles(screen, position_figurex, position_figurey, circles):
     ''' fukcja ma utworzyć prostokąty ktore stanowią plansze '''
-    circle = Circle(screen)
+    circle_bmp = 'images/kolko.bmp'
+    circle = CircleCross(screen, circle_bmp)
     circle.rect.centerx =  position_figurex
     circle.rect.centery = position_figurey
     circles.add(circle)
 
 def create_crosses(screen, position_figurex, position_figurey, crosses):
     ''' fukcja ma utworzyć prostokąty ktore stanowią plansze '''
-    cross = Cross(screen)
+    cross_bmp = 'images/krzyzyk.bmp'
+    cross = CircleCross(screen, cross_bmp)
     cross.rect.centerx =  position_figurex
     cross.rect.centery = position_figurey
     crosses.add(cross)
 
-def winning_check(currently_fields_list, kk_settings, screen):
+def winning_check(currently_fields_list, kk_settings):
     ''' funkcja sprawdzajaca czy osoby juz wygrala'''
     if currently_fields_list in kk_settings.winning_numbers_lists:
-        global line_beg_x
-        line_beg_x = (kk_settings.rectangles_dict[currently_fields_list[0]].centerx)
-        global line_beg_y
-        line_beg_y = (kk_settings.rectangles_dict[currently_fields_list[0]].centery)
-        global line_end_x
-        line_end_x = (kk_settings.rectangles_dict[currently_fields_list[2]].centerx)
-        global line_end_y
-        line_end_y = (kk_settings.rectangles_dict[currently_fields_list[2]].centery)
+        kk_settings.line_beg_x = (kk_settings.rectangles_dict[currently_fields_list[0]].centerx)
+        kk_settings.line_beg_y = (kk_settings.rectangles_dict[currently_fields_list[0]].centery)
+        kk_settings.line_end_x = (kk_settings.rectangles_dict[currently_fields_list[2]].centerx)
+        kk_settings.line_end_y = (kk_settings.rectangles_dict[currently_fields_list[2]].centery)
 
 
         print(currently_fields_list)
@@ -92,7 +86,7 @@ def check_rectangle_clicked(mouse_x, mouse_y, rectangles, screen, circles, kk_se
                     if rectangle.rect == rectangle_rect:
                         kk_settings.circles_fields_list.append(rectangle_number)
                         kk_settings.circles_fields_list.sort()
-                        winning_check(kk_settings.circles_fields_list, kk_settings, screen)
+                        winning_check(kk_settings.circles_fields_list, kk_settings)
             elif not kk_settings.circle_turn:
                 create_crosses(screen, position_figurex, position_figurey, crosses)
                 kk_settings.circle_turn = True
@@ -100,4 +94,4 @@ def check_rectangle_clicked(mouse_x, mouse_y, rectangles, screen, circles, kk_se
                     if rectangle.rect == rectangle_rect:
                         kk_settings.crosses_fields_list.append(rectangle_number)
                         kk_settings.crosses_fields_list.sort()
-                        winning_check(kk_settings.crosses_fields_list, kk_settings, screen)
+                        winning_check(kk_settings.crosses_fields_list, kk_settings)
