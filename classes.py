@@ -1,5 +1,5 @@
 import pygame
-
+import copy
 from pygame.sprite import Sprite
 
 class CircleCross(Sprite):
@@ -7,7 +7,7 @@ class CircleCross(Sprite):
 
     def __init__(self, screen, source_bmp):
         ''' inicjalizacja obiektu krzyzyka '''
-        super(CircleCross,self).__init__()
+        super().__init__()
         self.screen = screen
         self.source_bmp = source_bmp
 
@@ -20,10 +20,6 @@ class CircleCross(Sprite):
         self.rect.left = self.screen_rect.left
         self.rect.top = self.screen_rect.top
 
-    def blitme(self):
-        ''' wyswietlanie krzyzyka w aktualnym polozeniu '''
-        self.screen.blit(self.image, self.rect)
-
 
 class Settings():
     ''' Przechowywanie ustawien gry '''
@@ -32,46 +28,54 @@ class Settings():
         ''' początkowe ustawienia gry '''
         self.screen_width = 600
         self.screen_height = 600
+        self.new_game_button_centerx = 300
+        self.new_game_button_centery = 150
+        self.end_game_button_centerx = 300
+        self.end_game_button_centery = 450
         self.screen_background_color = (0, 0, 0)
 
         self.rectangle_field_heihht = 180
         self.rectangle_field_width = 180
+        self.menu = True
         self.circle_turn = True
+        self.game_running = True
         self.used_rectangles_list = []
         self.rectangles_dict = {}
         self.circles_fields_list =[]
         self.crosses_fields_list =[]
-        self.winning_numbers_lists = [[0,1,2],[3,4,5],[6,7,8],
+        self.winning_numbers_list_basic = [[0,1,2],[3,4,5],[6,7,8],
                                       [0,3,6],[1,4,7],[2,5,8],
                                       [0,4,8],[2,4,6]]
+        self.winning_numbers_list = []
         self.line_beg_x, self.line_beg_y, self.line_end_x, self.line_end_y = 0,0,0,0
+
+
+    def creating_expended_list(self):
+        self.winning_numbers_list = copy.deepcopy(self.winning_numbers_list_basic)
+
+        for i in range(0, 8):
+            for j in range(0, 9):
+                if j not in self.winning_numbers_list_basic[i]:
+                    temp = copy.deepcopy(self.winning_numbers_list_basic[i])
+                    self.winning_numbers_list.append(temp)
+                    self.winning_numbers_list[-1].append(j)
+        print(self.winning_numbers_list)
 
 class Rectangle(Sprite):
     ''' Klasa przedstawiajaca pojedynczy prostokąt tła w planszy '''
 
-    def __init__(self, screen, kk_settings):
+    def __init__(self, screen, kk_settings, rect_source):
         ''' inicjalizacja prostokąta i zdefiniowanie polozenia '''
-        super(Rectangle, self).__init__()
+        super().__init__()
         self.screen = screen
         self.kk_settings = kk_settings
 
         #wczytanie obrazu prostokata
-        self.image = pygame.image.load('images/prostokat.bmp')
+        self.image = pygame.image.load(rect_source)
         self.rect = self.image.get_rect()
 
         self.rect.centerx = 0
         self.rect.centery = 0
 
-    def blitme(self):
-        ''' Wyswietlanie prostokata w jego polozeniu'''
-        self.screen.blit(self.image, self.rect)
 
-class Line():
-    ''' Tworzenie lini wygrania '''
-    def __init__(self, screen, line_beg_x, line_beg_y, line_end_x, line_end_y):
-        ''' inicjalizacja '''
-        self.screen = screen
-        self.line = pygame.Line(screen, (200, 200, 200), (line_beg_x, line_beg_y), (line_end_x, line_end_y), 100)
 
-    def print_line(self):
-        pygame.draw.line(self.line)

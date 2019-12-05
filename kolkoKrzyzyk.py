@@ -15,15 +15,20 @@ def run_game():
     circles = Group()
     crosses = Group()
 
+   # utworzenie menu gry
+    functions.create_menu(screen,kk_settings)
+
     #utworzenie prostokatów planszy
     functions.create_rectangles(kk_settings, screen, rectangles)
 
     #rozpoczęcie pętli głównej gry
-    while True:
+    while kk_settings.game_running:
+
         #sprawdzanie myszki i klawiatury
         functions.check_events(rectangles, screen, circles, kk_settings, crosses)
 
         #odwiezenie ekranu po przejsciu kazdej iteracji
         functions.update_screen(kk_settings, screen, rectangles, circles, crosses)
-run_game()
 
+
+run_game()
