@@ -109,14 +109,32 @@ def create_crosses(screen, position_figurex, position_figurey, crosses):
 
 def winning_check(currently_fields_list, kk_settings):
     ''' funkcja sprawdzajaca czy osoby juz wygrala'''
-    kk_settings.creating_expended_list()
+    print(currently_fields_list)
+    ''' 
+       if currently_fields_list in kk_settings.winning_numbers_list:
+            kk_settings.line_beg_x = (kk_settings.rectangles_dict[currently_fields_list[0]].centerx)
+            kk_settings.line_beg_y = (kk_settings.rectangles_dict[currently_fields_list[0]].centery)
+            kk_settings.line_end_x = (kk_settings.rectangles_dict[currently_fields_list[2]].centerx)
+            kk_settings.line_end_y = (kk_settings.rectangles_dict[currently_fields_list[2]].centery)
+            kk_settings.menu = True
+        '''
+    if len(currently_fields_list) > 2:
+        currently_fields_set = set()
+        for currently_field in currently_fields_list:
+            currently_fields_set.add(currently_field)
 
-    if currently_fields_list in kk_settings.winning_numbers_list:
-        kk_settings.line_beg_x = (kk_settings.rectangles_dict[currently_fields_list[0]].centerx)
-        kk_settings.line_beg_y = (kk_settings.rectangles_dict[currently_fields_list[0]].centery)
-        kk_settings.line_end_x = (kk_settings.rectangles_dict[currently_fields_list[2]].centerx)
-        kk_settings.line_end_y = (kk_settings.rectangles_dict[currently_fields_list[2]].centery)
-        kk_settings.menu = True
+        for i in range(0,8):
+            winning_numbers_set_basic = set()
+            for winning_number in kk_settings.winning_numbers_list_basic[i]:
+                winning_numbers_set_basic.add(winning_number)
+            if winning_numbers_set_basic.issubset(currently_fields_set):
+                print(winning_numbers_set_basic)
+                print(currently_fields_set)
+                kk_settings.line_beg_x = (kk_settings.rectangles_dict[kk_settings.winning_numbers_list_basic[i][0]].centerx)
+                kk_settings.line_beg_y = (kk_settings.rectangles_dict[kk_settings.winning_numbers_list_basic[i][0]].centery)
+                kk_settings.line_end_x = (kk_settings.rectangles_dict[kk_settings.winning_numbers_list_basic[i][2]].centerx)
+                kk_settings.line_end_y = (kk_settings.rectangles_dict[kk_settings.winning_numbers_list_basic[i][2]].centery)
+                kk_settings.menu = True
 
 
 def check_rectangle_clicked(mouse_x, mouse_y, rectangles, screen, circles, kk_settings, crosses):

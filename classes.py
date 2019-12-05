@@ -46,20 +46,9 @@ class Settings():
         self.winning_numbers_list_basic = [[0,1,2],[3,4,5],[6,7,8],
                                       [0,3,6],[1,4,7],[2,5,8],
                                       [0,4,8],[2,4,6]]
-        self.winning_numbers_list = []
         self.line_beg_x, self.line_beg_y, self.line_end_x, self.line_end_y = 0,0,0,0
 
 
-    def creating_expended_list(self):
-        self.winning_numbers_list = copy.deepcopy(self.winning_numbers_list_basic)
-
-        for i in range(0, 8):
-            for j in range(0, 9):
-                if j not in self.winning_numbers_list_basic[i]:
-                    temp = copy.deepcopy(self.winning_numbers_list_basic[i])
-                    self.winning_numbers_list.append(temp)
-                    self.winning_numbers_list[-1].append(j)
-        print(self.winning_numbers_list)
 
 class Rectangle(Sprite):
     ''' Klasa przedstawiajaca pojedynczy prostokąt tła w planszy '''
@@ -76,6 +65,4 @@ class Rectangle(Sprite):
 
         self.rect.centerx = 0
         self.rect.centery = 0
-
-
 
